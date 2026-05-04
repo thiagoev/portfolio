@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thiago Vieira — IT Project Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #18181f;
+      --border: rgba(255,255,255,0.07);
+      --accent: #00e5b0;
+      --accent2: #6c6fff;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --heading-font: 'DM Serif Display', serif;
+      --body-font: 'Outfit', sans-serif;
+      --mono-font: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body-font);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── MESH GRADIENT BG ── */
+    .mesh {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(ellipse 60% 50% at 10% 20%, rgba(0,229,176,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 85% 75%, rgba(108,111,255,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,255,255,0.015) 0%, transparent 70%);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,15,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono-font);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 3rem 5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-inner {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.9s ease forwards 0.2s;
+    }
+
+    .hero-tag {
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: var(--heading-font);
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-summary {
+      max-width: 600px;
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.6rem;
+      border-radius: 4px;
+      font-family: var(--mono-font);
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      font-weight: 500;
+    }
+
+    .btn-primary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,229,176,0.2);
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 2rem 3rem;
+    }
+
+    .stats-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .stat:nth-child(1) { animation-delay: 0.1s; }
+    .stat:nth-child(2) { animation-delay: 0.2s; }
+    .stat:nth-child(3) { animation-delay: 0.3s; }
+    .stat:nth-child(4) { animation-delay: 0.4s; }
+
+    .stat-number {
+      font-family: var(--heading-font);
+      font-size: 2.2rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION ── */
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 3rem;
+    }
+
+    .section-label {
+      font-family: var(--mono-font);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h2 {
+      font-family: var(--heading-font);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: #fff;
+      margin-bottom: 3rem;
+      line-height: 1.15;
+    }
+
+    /* ── EXPERIENCE ── */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+    }
+
+    .timeline-item {
+      padding: 0 0 3.5rem 2.5rem;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: all 0.5s ease;
+    }
+
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -5px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(0,229,176,0.5);
+    }
+
+    .timeline-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-company {
+      font-family: var(--mono-font);
+      font-size: 0.8rem;
+      color: var(--accent2);
+      letter-spacing: 0.06em;
+    }
+
+    .timeline-period {
+      font-family: var(--mono-font);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .timeline-role {
+      font-family: var(--heading-font);
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .timeline-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .tag {
+      font-family: var(--mono-font);
+      font-size: 0.7rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 3px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .project-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .project-card:hover::before { transform: scaleX(1); }
+
+    .project-card:hover {
+      border-color: rgba(0,229,176,0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+
+    .project-icon {
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-title {
+      font-family: var(--heading-font);
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 0.7rem;
+    }
+
+    .project-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .project-meta {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-top: 1.2rem;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.8rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .skill-group.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .skill-group-title {
+      font-family: var(--mono-font);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .skill-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .skill-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .skill-list li::before {
+      content: '▸';
+      color: var(--accent);
+      font-size: 0.7rem;
+    }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .contact-title {
+      font-family: var(--heading-font);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .contact-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.25s;
+      background: var(--surface2);
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      transform: translateX(6px);
+    }
+
+    .contact-link-label {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .contact-link-value {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .contact-icon {
+      font-size: 1.2rem;
+      width: 2.5rem;
+      text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      section { padding: 4rem 1.5rem; }
+      .stats-bar { padding: 1.5rem; }
+      .stats-inner { gap: 1.5rem; }
+      .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mesh"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">TV — Portfolio</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div id="about">
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-tag">IT Project Manager · Campinas, Brazil</div>
+        <h1>Thiago<br><em>Vieira</em></h1>
+        <p class="hero-summary">
+          Results-driven IT Project Manager with 15+ years delivering high-impact software products in AI, mobile, and enterprise domains — at Samsung, International Paper, and IBM. Currently deepening expertise in AI & Big Data through an MBA at USP ICMC.
+        </p>
+        <div class="hero-cta">
+          <a href="mailto:thiagov.cps@gmail.com" class="btn btn-primary">Get in touch</a>
+          <a href="https://www.linkedin.com/in/thiago-vieira-6836831b6/" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat">
+        <span class="stat-number">15+</span>
+        <span class="stat-label">Years of experience</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">58</span>
+        <span class="stat-label">Largest team led</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">3</span>
+        <span class="stat-label">Global companies</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">4×</span>
+        <span class="stat-label">Trips to Samsung HQ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">Career</div>
+    <h2>Where I've<br><em style="font-style:italic; color: var(--accent)">worked</em></h2>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-meta">
+          <span class="timeline-company">SiDi — Samsung Brazil R&D Center</span>
+          <span class="timeline-period">2021 – Present</span>
+        </div>
+        <div class="timeline-role">Project Manager</div>
+        <p class="timeline-desc">
+          Reported directly to the Project Sponsor in South Korea, maintaining strategic alignment between Brazilian R&D operations and Samsung HQ. Led simultaneous end-to-end delivery of multiple complex software projects within the Samsung ecosystem, including AI-powered audio processing and mobile video editing. Responsible for budget planning, cost control, and RDA reports submitted to Brazil's Ministry of Science, Technology and Innovation.
+        </p>
+        <div class="timeline-tags">
+          <span class="tag">Scrum</span><span class="tag">Kanban</span><span class="tag">AI/ML</span>
+          <span class="tag">Jira</span><span class="tag">Confluence</span><span class="tag">GitHub</span>
+          <span class="tag">Audio & Video Processing</span><span class="tag">Figma</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--accent2); box-shadow: 0 0 12px rgba(108,111,255,0.5)"></div>
+        <div class="timeline-meta">
+          <span class="timeline-company" style="color: var(--accent2)">International Paper</span>
+          <span class="timeline-period">2011 – 2021</span>
+        </div>
+        <div class="timeline-role">Project Consultant</div>
+        <p class="timeline-desc">
+          Reported directly to the Project Sponsor at headquarters in Memphis, TN (USA). Led the planning and implementation of SAP HCM, managing a cross-functional team of 22 members to deliver HR process digitalization. Directed systemic adaptation to eSocial and led Brazil's LGPD compliance implementation, ensuring regulatory adherence within government-mandated deadlines.
+        </p>
+        <div class="timeline-tags">
+          <span class="tag">SAP HCM</span><span class="tag">LGPD / GDPR</span><span class="tag">Agile</span>
+          <span class="tag">Waterfall</span><span class="tag">MS Project</span><span class="tag">Power BI</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: #8888ff; box-shadow: 0 0 12px rgba(136,136,255,0.4)"></div>
+        <div class="timeline-meta">
+          <span class="timeline-company" style="color: #8888ff">IBM do Brasil</span>
+          <span class="timeline-period">2007 – 2011</span>
+        </div>
+        <div class="timeline-role">Systems Analyst</div>
+        <p class="timeline-desc">
+          Provided Level 2 IT support on complex projects for international clients, managing escalated incidents within strict SLA requirements. Implemented ITIL-based processes for incident management and governance. Developed automation scripts using UNIX and PL/SQL to streamline repetitive processes.
+        </p>
+        <div class="timeline-tags">
+          <span class="tag">PL/SQL</span><span class="tag">ITIL</span><span class="tag">Shell Scripts</span>
+          <span class="tag">Process Automation</span><span class="tag">Service Desk</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">Highlights</div>
+    <h2>Key <em style="font-style:italic; color: var(--accent)">projects</em></h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-icon">🎙️</div>
+        <div class="project-title">Samsung Audio Eraser</div>
+        <p class="project-desc">Led a 16-member team to deliver a Galaxy AI feature capable of recognizing and isolating audio channels — voice, music, wind, crowd, traffic — enabling precision noise removal and voice enhancement via machine learning models.</p>
+        <div class="project-meta">Galaxy AI · Samsung Apps · ML · Audio Processing</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🎬</div>
+        <div class="project-title">Samsung Studio (Video Editor)</div>
+        <p class="project-desc">Led a 34-member team to build a full-featured mobile video editor, managing delivery across FFMPEG processing, audio waveforms, timeline/preview systems, and 15+ editing features including slow motion, filters, and subtitles.</p>
+        <div class="project-meta">Mobile · FFMPEG · Video · Cross-functional Team</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🔐</div>
+        <div class="project-title">Samsung Pass</div>
+        <p class="project-desc">Led a 7-member team to deliver a secure credential management solution, implementing end-to-end encryption for passwords, addresses, and payment data stored in Samsung's cloud infrastructure.</p>
+        <div class="project-meta">Security · Encryption · Cloud · Samsung</div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">📋</div>
+        <div class="project-title">SAP HCM Implementation</div>
+        <p class="project-desc">Led a 22-member cross-functional team to implement SAP HCM at International Paper, digitizing HR processes and ensuring compliance with eSocial within government-mandated deadlines.</p>
+        <div class="project-meta">SAP · eSocial · LGPD · Waterfall</div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">Toolkit</div>
+    <h2>Skills &amp; <em style="font-style:italic; color: var(--accent)">expertise</em></h2>
+    <div class="skills-grid">
+
+      <div class="skill-group">
+        <div class="skill-group-title">Project Management</div>
+        <ul class="skill-list">
+          <li>Scrum & Kanban</li>
+          <li>PMO Methodologies</li>
+          <li>Risk Management</li>
+          <li>Stakeholder Communication</li>
+          <li>Budget Planning & Control</li>
+          <li>Roadmap Definition</li>
+        </ul>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">Tools & Platforms</div>
+        <ul class="skill-list">
+          <li>Jira & Confluence</li>
+          <li>Microsoft Project</li>
+          <li>GitHub & Bitbucket</li>
+          <li>Power BI</li>
+          <li>Figma</li>
+          <li>VS Code</li>
+        </ul>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">Technical</div>
+        <ul class="skill-list">
+          <li>AI & Machine Learning (PM)</li>
+          <li>Audio & Video Processing</li>
+          <li>SAP HCM</li>
+          <li>PL/SQL & Shell Scripts</li>
+          <li>Cloud Services & APIs</li>
+          <li>ITIL</li>
+        </ul>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">Compliance & Regulation</div>
+        <ul class="skill-list">
+          <li>LGPD (Brazilian GDPR)</li>
+          <li>GDPR</li>
+          <li>eSocial</li>
+          <li>Data Privacy & Security</li>
+          <li>RDA Reporting (MCTI)</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <div class="contact-section" id="contact">
+    <div class="contact-inner">
+      <div>
+        <div class="section-label">Let's connect</div>
+        <div class="contact-title">Open to new <em>opportunities</em></div>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:thiagov.cps@gmail.com" class="contact-link">
+          <span class="contact-icon">✉️</span>
+          <div>
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-value">thiagov.cps@gmail.com</span>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/thiago-vieira-6836831b6/" target="_blank" class="contact-link">
+          <span class="contact-icon">💼</span>
+          <div>
+            <span class="contact-link-label">LinkedIn</span>
+            <span class="contact-link-value">linkedin.com/in/thiago-vieira</span>
+          </div>
+        </a>
+        <a href="tel:+5519983143170" class="contact-link">
+          <span class="contact-icon">📱</span>
+          <div>
+            <span class="contact-link-label">Mobile</span>
+            <span class="contact-link-value">+55 19 98314-3170</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Thiago Vieira · Campinas, São Paulo, Brazil · Built with GitHub Pages
+  </footer>
+
+  <script>
+    // Scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.timeline-item, .project-card, .skill-group').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
